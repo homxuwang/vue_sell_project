@@ -161,7 +161,7 @@ export default {
     },
     methods: {
      doSomethingOnSlideChange () {
-        console.log('doSomethingOnSlideChange run!')
+        // console.log('doSomethingOnSlideChange run!')
      }
     }
 }

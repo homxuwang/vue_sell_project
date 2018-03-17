@@ -5,11 +5,11 @@
             <img src="../assets/favicon.png">
             <div class="head-nav">
               <ul class="nav-list">
-                <li>Sign in</li>
+                <li  @click="logClick">Sign in</li>
                 <li class="nav-pile">|</li>
-                <li>Sign up</li>
+                <li  @click="regClick">Sign up</li>
                 <li class="nav-pile">|</li>
-                <li>About</li>
+                <li @click="aboutClick">About</li>
               </ul>
             </div>
         </div>
@@ -22,13 +22,50 @@
     <div class="app-foot">
       <p>© 2018 Homxu_Learn_Vue.js2.0</p>
     </div>
-  </div>
+     <my-dialog :is-show="isShowLogDialog" @on-close="closeLogDialog">
+      <p>log</p>
+    </my-dialog>
+     <my-dialog :is-show="isShowRegDialog" @on-close="closeRegDialog">
+      <p>reg</p>
+    </my-dialog>
+    <my-dialog :is-show="isShowAboutDialog" @on-close="closeAboutDialog">
+      <p>other hello</p>
+    </my-dialog>
+    
+  </div>  
 </template>
 
 <script>
+import Dialog from './dialog.vue'
 export default {
+  components:{
+    MyDialog:Dialog
+  },
   data () {
     return {
+      isShowAboutDialog: false,
+      isShowLogDialog: false,
+      isShowRegDialog: false
+    }
+  },
+  methods:{
+    aboutClick () {
+      this.isShowAboutDialog = true
+    },
+    logClick (){
+      this.isShowLogDialog = true
+    },
+    regClick () {
+      this.isShowRegDialog = true
+    },
+    closeLogDialog () {
+      this.isShowLogDialog = false
+    },
+    closeRegDialog () {
+      this.isShowRegDialog = false
+    },
+    closeAboutDialog () {
+      this.isShowAboutDialog = false
     }
   }
 }
