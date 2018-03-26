@@ -5,10 +5,14 @@
             <img src="../assets/favicon.png">
             <div class="head-nav">
               <ul class="nav-list">
-                <li  @click="logClick">Sign in</li>
-                <li class="nav-pile">|</li>
-                <li  @click="regClick">Sign up</li>
-                <li class="nav-pile">|</li>
+                <li>{{ username }}</li>
+                <li v-if="username !==''" class="nav-pile">|</li>
+                <li v-if="username !==''" >退出</li>
+                <li v-if="username !==''" class="nav-pile">|</li>
+                <li v-if="username ===''"  @click="logClick">Sign in</li>
+                <li class="nav-pile" v-if="username ===''">|</li>
+                <li  @click="regClick" v-if="username ===''">Sign up</li>
+                <li class="nav-pile" v-if="username ===''">|</li>
                 <li @click="aboutClick">About</li>
               </ul>
             </div>
@@ -22,14 +26,14 @@
     <div class="app-foot">
       <p>© 2018 Homxu_Learn_Vue.js2.0</p>
     </div>
-     <my-dialog :is-show="isShowLogDialog" @on-close="closeLogDialog">
-      <p>log</p>
+     <my-dialog :is-show="isShowLogDialog" @on-close="closeDialog('isShowLogDialog')">
+      <log-form @has-log="onSuccessLog"></log-form>
     </my-dialog>
-     <my-dialog :is-show="isShowRegDialog" @on-close="closeRegDialog">
-      <p>reg</p>
+     <my-dialog :is-show="isShowRegDialog" @on-close="closeDialog('isShowRegDialog')">
+      <reg-form></reg-form>
     </my-dialog>
-    <my-dialog :is-show="isShowAboutDialog" @on-close="closeAboutDialog">
-      <p>other hello</p>
+    <my-dialog :is-show="isShowAboutDialog" @on-close="closeDialog('isShowAboutDialog')">
+      <p>关于</p>
     </my-dialog>
     
   </div>  
@@ -37,15 +41,20 @@
 
 <script>
 import Dialog from './dialog.vue'
+import LogForm from './logform.vue'
+import RegForm from './regform.vue'
 export default {
   components:{
-    MyDialog:Dialog
+    MyDialog:Dialog,
+    LogForm,
+    RegForm
   },
   data () {
     return {
       isShowAboutDialog: false,
       isShowLogDialog: false,
-      isShowRegDialog: false
+      isShowRegDialog: false,
+      username: ''
     }
   },
   methods:{
@@ -58,14 +67,12 @@ export default {
     regClick () {
       this.isShowRegDialog = true
     },
-    closeLogDialog () {
-      this.isShowLogDialog = false
+    closeDialog (attr) {
+      this[attr] = false
     },
-    closeRegDialog () {
-      this.isShowRegDialog = false
-    },
-    closeAboutDialog () {
-      this.isShowAboutDialog = false
+    onSuccessLog (data) {  //如果成功登陆
+      this.username = data.username  //最上方的登陆条框显示登录用户名
+      this.closeDialog('isShowLogDialog')  //关掉登录框
     }
   }
 }
