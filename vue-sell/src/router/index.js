@@ -18,6 +18,7 @@ export default new Router({
     {
       path: '/detail',
       component: DetailPage,
+      redirect: 'detail/analysis',
       children: [
         {
           path: 'forecast',

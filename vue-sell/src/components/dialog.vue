@@ -14,24 +14,23 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      isShow: {
-        type: Boolean,
-        default: false
-      }
-    },
-    data () {
-      return {
-        
-      }
-    },
-    methods:{
-      closeMyself () {
-        this.$emit('on-close')
-      }
+export default {
+  props: {
+    isShow: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data () {
+    return {
+    }
+  },
+  methods:{
+     closeMyself () {
+      this.$emit('on-close')
     }
   }
+}
 </script>
 
 <style scoped>
