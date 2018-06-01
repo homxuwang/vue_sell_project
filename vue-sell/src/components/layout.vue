@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import Dialog from './dialog.vue'
+import Dialog from './base/dialog.vue'
 import LogForm from './logform.vue'
 import RegForm from './regform.vue'
 export default {

@@ -48,7 +48,7 @@
       <div class="sales-board-line">
         <div class="sales-board-line-left">&nbsp;</div>
         <div class="sales-board-line-right">
-          <div class="button">
+          <div class="button" @click="showPayDialog">
             立即购买
           </div>
         </div>
@@ -76,20 +76,49 @@
         <li>用户所在地理区域分布状况等</li>
       </ul>
     </div>
+    <my-dialog :is-show="isShowPayDialog" @on-close="hidePayDialog">
+      <table class="buy-dialog-table">
+          <tr>
+            <th>购买数量</th>
+            <th>产品类型</th>
+            <th>有效时间</th>
+            <th>产品版本</th>
+            <th>总价</th>
+          </tr>
+          <tr>
+            <td>{{ buyNum }}</td>
+            <td>{{ buyType.label }}</td>
+            <td>{{ period.label }}</td>
+            <td>
+              <span v-for="item in versions">{{ item.label }}</span>
+            </td>
+            <td>{{ price }}</td>
+          </tr>
+        </table>
+        <h3 class="buy-dialog-title">请选择银行</h3>
+        <bank-chooser @on-change="onChangeBanks"></bank-chooser>
+        <div class="button buy-dialog-btn" @click="confirmBuy">
+          确认购买
+        </div>
+    </my-dialog>
   </div>
 </template>
 <script>
-import VSelection from '../../components/selection'
-import VCounter from '../../components/counter'
-import VMulChooser from '../../components/multiplyChooser'
-import VChooser from '../../components/chooser'
+import VSelection from '../../components/base/selection'
+import VCounter from '../../components/base/counter'
+import VMulChooser from '../../components/base/multiplyChooser'
+import VChooser from '../../components/base/chooser'
+import Dialog from '../../components/base/dialog'
+import BankChooser from '../../components/bankChooser'
 import _ from 'lodash'
 export default{
   components: {
   VSelection,
   VCounter,
   VMulChooser,
-  VChooser
+  VChooser,
+  MyDialog: Dialog,
+  BankChooser
   },
   data (){
   return {
@@ -139,13 +168,20 @@ export default{
         label: '高级版',
         value: 2
       }
-    ]
+    ],
+    isShowPayDialog: false
     }
   },
   methods: {
     onParamChange (attr,val) {
       this[attr] = val
       this.getPrice()
+    },
+    showPayDialog () {
+      this.isShowPayDialog = true
+    },
+    hidePayDialog () {
+      this.isShowPayDialog = false
     },
     getPrice () {
       let buyVersionsArray = _.map(this.versions, (item) => {

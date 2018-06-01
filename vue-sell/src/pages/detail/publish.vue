@@ -251,9 +251,9 @@
   </div>
 </template>
 <script>
-import VCount from '../../components/counter'
-import VSelection from '../../components/selection'
-import VChooser from '../../components/chooser'
+import VCount from '../../components/base/counter'
+import VSelection from '../../components/base/selection'
+import VChooser from '../../components/base/chooser'
 export default{
     components: {
       VCount,
