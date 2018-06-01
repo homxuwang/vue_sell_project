@@ -21,5 +21,8 @@
   "longin":{
       "username": "wanghx@whu.edu.cn",
       "userId": 123456
+  },
+  "getPrice": {
+    "amount": 678
   }
 }

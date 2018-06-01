@@ -41,7 +41,9 @@
         <div class="sales-board-line-left">
           总价：
         </div>
-        <div class="sales-board-line-right"></div>
+        <div class="sales-board-line-right">
+          {{ price }} 元
+        </div>
       </div>
       <div class="sales-board-line">
         <div class="sales-board-line-left">&nbsp;</div>
@@ -81,6 +83,7 @@ import VSelection from '../../components/selection'
 import VCounter from '../../components/counter'
 import VMulChooser from '../../components/multiplyChooser'
 import VChooser from '../../components/chooser'
+import _ from 'lodash'
 export default{
   components: {
   VSelection,
@@ -94,6 +97,7 @@ export default{
     buyType: {},
     versions: [],
     period: {},
+    price: 0,
     periodList: [
         {
           label: '半年',
@@ -141,9 +145,30 @@ export default{
   methods: {
     onParamChange (attr,val) {
       this[attr] = val
-      console.log(attr, this[attr])
+      this.getPrice()
+    },
+    getPrice () {
+      let buyVersionsArray = _.map(this.versions, (item) => {
+        return item.value
+      })
+      let reqParams = {
+        buyNumber: this.buyNum,
+        buyType: this.buyType.value,
+        period: this.period.value,
+        version: buyVersionsArray.join(',')
+      }
+      this.$http.post('/api/getPrice', reqParams).then((res) =>{
+        this.price = res.data.amount
+      })
+    }    
+  },
+  mounted () {
+    this.buyNum = 1
+    this.buyType = this.buyTypes[0]
+    this.versions = [this.versionList[0]]
+    this.period = this.periodList[0]
+    this.getPrice()
     }
-  }
 }
 </script>
 
