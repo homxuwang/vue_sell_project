@@ -110,7 +110,7 @@ export default {
       this.startDate = date
       this.getList()
     },
-    chageEndDate (date) {
+    changeEndDate (date) {
       this.endDate = date
       this.getList()
     },
