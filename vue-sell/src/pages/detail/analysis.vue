@@ -101,6 +101,12 @@
           确认购买
         </div>
     </my-dialog>
+    <my-dialog :is-show="isShowErrDialog" @on-close="hideErrDialog">
+        支付失败！
+    </my-dialog>
+    <check-order :is-show-check-dialog="isShowCheckOrder" @on-close-check-dialog="hideCheckOrder">
+
+    </check-order>
   </div>
 </template>
 <script>
@@ -110,6 +116,7 @@ import VMulChooser from '../../components/base/multiplyChooser'
 import VChooser from '../../components/base/chooser'
 import Dialog from '../../components/base/dialog'
 import BankChooser from '../../components/bankChooser'
+import CheckOrder from '../../components/checkOrder'
 import _ from 'lodash'
 export default{
   components: {
@@ -118,7 +125,8 @@ export default{
   VMulChooser,
   VChooser,
   MyDialog: Dialog,
-  BankChooser
+  BankChooser,
+  CheckOrder
   },
   data (){
   return {
@@ -169,7 +177,11 @@ export default{
         value: 2
       }
     ],
-    isShowPayDialog: false
+    isShowPayDialog: false,
+    bankId: null,
+    orderId: null,
+    isShowCheckOrder: false,
+    isShowErrDialog: false
     }
   },
   methods: {
@@ -182,6 +194,35 @@ export default{
     },
     hidePayDialog () {
       this.isShowPayDialog = false
+    },
+    onChangeBanks (bankObj) {
+      this.bankId = bankObj.id
+    },
+    hideErrDialog () {
+      this.isShowErrDialog = false
+    },
+    hideCheckOrder () {
+      this.isShowCheckOrder = false
+    },
+    confirmBuy () {
+      let buyVersionsArray = _.map(this.versions, (item) => {
+        return item.value
+      })
+      let reqParams = {
+        buyNumber: this.buyNum,
+        buyType: this.buyType.value,
+        period: this.period.value,
+        version: buyVersionsArray.join(','),
+        bankId: this.bankId
+      }
+      this.$http.post('/api/createOrder', reqParams).then((res) =>{
+        this.orderId = res.data.orderId
+        this.isShowCheckOrder = true
+        this.isShowPayDialog = false
+      }, (err) => {
+        this.isShowErrDialog = true
+        this.isShowPayDialog = false
+      })
     },
     getPrice () {
       let buyVersionsArray = _.map(this.versions, (item) => {
