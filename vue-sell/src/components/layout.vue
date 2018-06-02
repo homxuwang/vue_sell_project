@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click="resetComponent">
     <div class="app-head">
         <div class="app-header-inner">
             <router-link :to="{path:'/'}">
@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import { eventBus } from '../eventBus'
 import Dialog from './base/dialog.vue'
 import LogForm from './logform.vue'
 import RegForm from './regform.vue'
@@ -75,6 +76,9 @@ export default {
     onSuccessLog (data) {  //如果成功登陆
       this.username = data.username  //最上方的登陆条框显示登录用户名
       this.closeDialog('isShowLogDialog')  //关掉登录框
+    },
+    resetComponent () {
+      eventBus.$emit('reset-component')
     }
   }
 }

@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { eventBus } from '../../eventBus'
 export default {
  props: {
    selections:{
@@ -30,14 +31,21 @@ export default {
    }
  },
  methods: {
-   toggleDrop() {
+   toggleDrop(event) {
+     event.stopPropagation()
+     eventBus.$emit('reset-component')
      this.isDrop = !this.isDrop
    },
    chooseSelection (index) {
-     this.nowIndex = index,
-     this.isDrop = false,
+     this.nowIndex = index
+    //  this.isDrop = false,
      this.$emit('on-change', this.selections[this.nowIndex])
    }
+ },
+ mounted () {
+   eventBus.$on('reset-component', () => {
+     this.isDrop = false
+   })
  }
 }
 </script>
